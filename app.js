@@ -10,7 +10,8 @@
     name: 'Nube Dental Clinic',
     doctor: 'Dra. Rosa Avila',
     location: 'Distrito Domo, Santa Catarina',
-    emergencyPhone: '[Línea de emergencia no disponible aún]',
+    whatsapp: '528112219911',
+    emergencyPhone: '81 1221 9911',
     hours: {
       weekdays: 'Lunes a Viernes de 10:00 AM a 7:00 PM',
       saturday: 'Sábados de 10:00 AM a 2:00 PM',
@@ -608,10 +609,23 @@
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
+  // ---- WhatsApp Notification URL Generator ----
+  function generateWhatsAppUrl(data) {
+    const msg =
+      `📅 *Nueva Cita - Nube Dental Clinic*\n\n` +
+      `👤 *Paciente:* ${data.name}\n` +
+      `📞 *Teléfono:* ${data.phone}\n` +
+      `🦷 *Servicio:* ${data.service}\n` +
+      `📅 *Día:* ${data.selectedSlot.day} a las ${data.selectedSlot.time}\n\n` +
+      `_Enviado desde el asistente virtual._`;
+    return `https://wa.me/${OFFICE.whatsapp}?text=${encodeURIComponent(msg)}`;
+  }
+
   async function handleConfirming(text, intent) {
     if (intent === 'confirm' || text.toLowerCase().includes('confirmar') || text.toLowerCase().includes('si') || text.toLowerCase().includes('sí')) {
       currentState = State.IDLE;
       const calendarUrl = generateCalendarUrl(appointmentData);
+      const whatsappUrl = generateWhatsAppUrl(appointmentData);
       await botReply(
         `<p>🎉 <strong>¡Tu cita ha sido agendada exitosamente!</strong></p>
         <div class="summary-card">
@@ -620,7 +634,10 @@
           <p>📅 ${appointmentData.selectedSlot.day} a las ${appointmentData.selectedSlot.time}</p>
           <p>📍 <a href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">Distrito Domo, Santa Catarina</a></p>
         </div>
-        <p>📅 <a href="${calendarUrl}" target="_blank" rel="noopener noreferrer" class="gcal-btn">Agregar a Google Calendar</a></p>
+        <div class="action-btns">
+          <a href="${calendarUrl}" target="_blank" rel="noopener noreferrer" class="gcal-btn">📅 Agregar a Google Calendar</a>
+          <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">💬 Confirmar por WhatsApp</a>
+        </div>
         <p>Te esperamos en <strong>Nube Dental Clinic</strong>. Si necesitas cancelar o reprogramar, no dudes en contactarnos. ¡Que tengas un excelente día! 😊</p>`,
         { html: true }
       );
