@@ -474,18 +474,21 @@ body::after {
 }
 
 .message-bubble.emergency {
-  background: hsla(0, 70%, 95%, 0.8);
+  background: hsla(0, 70%, 95%, 0.95);
+  color: var(--text);
   border: 1px solid var(--danger);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 .summary-card {
-  background: linear-gradient(135deg, hsla(210,85%,90%,0.9), hsla(260,70%,90%,0.9));
+  background: linear-gradient(135deg, hsla(210, 85%, 94%, 0.96), hsla(215, 75%, 92%, 0.96));
+  color: var(--text);
   border: 1px solid var(--primary-light);
   border-radius: var(--radius);
   padding: var(--space-md);
   margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 
 .summary-card h4 {
@@ -498,7 +501,17 @@ body::after {
 
 .summary-card p {
   font-size: 0.85rem;
+  color: var(--text);
   margin-bottom: var(--space-xs);
+}
+
+.summary-card a {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.summary-card a:hover {
+  color: var(--primary);
 }
 
 .gcal-btn {

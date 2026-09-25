@@ -5,6 +5,16 @@
 (function () {
   'use strict';
 
+  // ---- EmailJS Config ----
+  const EMAILJS = {
+    publicKey:  'p458PyAh6Pvxlzmh_',
+    serviceId:  'service_qzya5no',
+    templateId: 'template_3p6ndam',
+  };
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init(EMAILJS.publicKey);
+  }
+
   // ---- Office Data ----
   const OFFICE = {
     name: 'Nube Dental Clinic',
@@ -609,39 +619,46 @@
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
-  // ---- WhatsApp Notification URL Generator ----
-  function generateWhatsAppUrl(data) {
-    const msg =
-      `📅 *Nueva Cita - Nube Dental Clinic*\n\n` +
-      `👤 *Paciente:* ${data.name}\n` +
-      `📞 *Teléfono:* ${data.phone}\n` +
-      `🦷 *Servicio:* ${data.service}\n` +
-      `📅 *Día:* ${data.selectedSlot.day} a las ${data.selectedSlot.time}\n\n` +
-      `_Enviado desde el asistente virtual._`;
-    return `https://wa.me/${OFFICE.whatsapp}?text=${encodeURIComponent(msg)}`;
+  // ---- Email Notification (EmailJS — automático) ----
+  async function sendEmailNotification(data) {
+    const templateParams = {
+      paciente_nombre:   data.name,
+      paciente_telefono: data.phone,
+      servicio:          data.service,
+      dia:               data.selectedSlot.day,
+      hora:              data.selectedSlot.time,
+    };
+    try {
+      if (typeof emailjs !== 'undefined') {
+        await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, templateParams);
+      }
+      return true;
+    } catch (err) {
+      console.warn('EmailJS error:', err);
+      return false;
+    }
   }
 
   async function handleConfirming(text, intent) {
     if (intent === 'confirm' || text.toLowerCase().includes('confirmar') || text.toLowerCase().includes('si') || text.toLowerCase().includes('sí')) {
       currentState = State.IDLE;
-      const calendarUrl = generateCalendarUrl(appointmentData);
-      const whatsappUrl = generateWhatsAppUrl(appointmentData);
+      const snapshot = { ...appointmentData };
+      appointmentData = {};
+
+      // Enviar notificación automática a la doctora en segundo plano
+      sendEmailNotification(snapshot);
+
       await botReply(
         `<p>🎉 <strong>¡Tu cita ha sido agendada exitosamente!</strong></p>
         <div class="summary-card">
           <h4>✅ Cita Confirmada</h4>
-          <p>🦷 ${appointmentData.service}</p>
-          <p>📅 ${appointmentData.selectedSlot.day} a las ${appointmentData.selectedSlot.time}</p>
+          <p>🦷 ${snapshot.service}</p>
+          <p>📅 ${snapshot.selectedSlot.day} a las ${snapshot.selectedSlot.time}</p>
           <p>📍 <a href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">Distrito Domo, Santa Catarina</a></p>
         </div>
-        <div class="action-btns">
-          <a href="${calendarUrl}" target="_blank" rel="noopener noreferrer" class="gcal-btn">📅 Agregar a Google Calendar</a>
-          <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">💬 Confirmar por WhatsApp</a>
-        </div>
-        <p>Te esperamos en <strong>Nube Dental Clinic</strong>. Si necesitas cancelar o reprogramar, no dudes en contactarnos. ¡Que tengas un excelente día! 😊</p>`,
+        <p>📧 Hemos notificado automáticamente a la <strong>Dra. Rosa Avila</strong>. Te esperamos en <strong>Nube Dental Clinic</strong>. ¡Que tengas un excelente día! 😊</p>`,
         { html: true }
       );
-      appointmentData = {};
     } else if (intent === 'deny' || text.toLowerCase().includes('corregir') || text.toLowerCase().includes('no')) {
       currentState = State.COLLECTING_SERVICE;
       appointmentData = {};
