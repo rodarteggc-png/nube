@@ -578,55 +578,105 @@
     }
   }
 
-  // ---- Google Calendar URL Generator ----
-  function generateCalendarUrl(data) {
+  // ---- Helper: Next Occurrence Date & 24h Time ----
+  function getAppointmentDateTime(data) {
     const dayMap = {
-      'Lunes': 1, 'Martes': 2, 'Mi\u00e9rcoles': 3,
-      'Jueves': 4, 'Viernes': 5, 'S\u00e1bado': 6, 'Domingo': 0,
+      'Lunes': 1, 'Martes': 2, 'Miércoles': 3,
+      'Jueves': 4, 'Viernes': 5, 'Sábado': 6, 'Domingo': 0,
     };
 
-    // Parse time (e.g. "5:00 PM" or "10:30 AM")
     const timeStr = data.selectedSlot.time;
     const [timePart, meridiem] = timeStr.split(' ');
     let [hours, minutes] = timePart.split(':').map(Number);
     if (meridiem === 'PM' && hours !== 12) hours += 12;
     if (meridiem === 'AM' && hours === 12) hours = 0;
 
-    // Find next occurrence of the target weekday
     const targetDay = dayMap[data.selectedSlot.day];
     const now = new Date();
     const todayDay = now.getDay();
     let daysAhead = targetDay - todayDay;
     if (daysAhead <= 0) daysAhead += 7;
+
     const eventDate = new Date(now);
     eventDate.setDate(now.getDate() + daysAhead);
     eventDate.setHours(hours, minutes, 0, 0);
 
-    // End time: 1 hour after start
-    const endDate = new Date(eventDate.getTime() + 60 * 60 * 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    const fechaIso = `${eventDate.getFullYear()}-${pad(eventDate.getMonth() + 1)}-${pad(eventDate.getDate())}`;
+    const hora24 = `${pad(hours)}:${pad(minutes)}`;
 
-    // Format: YYYYMMDDTHHmmss
+    return { eventDate, fechaIso, hora24 };
+  }
+
+  // ---- Google Calendar URL Generator ----
+  function generateCalendarUrl(data) {
+    const { eventDate } = getAppointmentDateTime(data);
+    const endDate = new Date(eventDate.getTime() + 60 * 60 * 1000);
     const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0];
 
     const params = new URLSearchParams({
       action: 'TEMPLATE',
-      text: `Cita Dental - ${data.service} | Nube Dental Clinic`,
+      text: `Cita Dental - ${data.service} (${data.name})`,
       dates: `${fmt(eventDate)}/${fmt(endDate)}`,
-      details: `Paciente: ${data.name}\nTel\u00e9fono: ${data.phone}\nServicio: ${data.service}\n\nNube Dental Clinic - Dra. Rosa Avila`,
+      details: `Paciente: ${data.name}\nTeléfono: ${data.phone}\nServicio: ${data.service}\n\nNube Dental Clinic - Dra. Rosa Avila`,
       location: 'Distrito Domo, Santa Catarina',
     });
 
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
-  // ---- Email Notification (EmailJS — automático) ----
+  // ---- WhatsApp URL to Contact Patient ----
+  function generatePatientWhatsAppUrl(data) {
+    const cleanPhone = data.phone.replace(/\D/g, '');
+    const fullPhone = cleanPhone.length === 10 ? `52${cleanPhone}` : cleanPhone;
+    const msg = `Hola ${data.name}, te escribimos del consultorio de la Dra. Rosa Avila (Nube Dental Clinic) para confirmar tu cita de *${data.service}* el próximo *${data.selectedSlot.day}* a las *${data.selectedSlot.time}*. 🦷`;
+    return `https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`;
+  }
+
+  // ---- DentAdmin 1-Click Registration URL & Auto-Sync ----
+  function generateDentAdminUrl(data) {
+    const { fechaIso, hora24 } = getAppointmentDateTime(data);
+    const params = new URLSearchParams({
+      nombre: data.name,
+      telefono: data.phone,
+      fecha: fechaIso,
+      hora: hora24,
+      motivo: data.service,
+    });
+    return `http://localhost:3000/api/bot-cita?${params.toString()}`;
+  }
+
+  async function syncWithDentAdmin(data) {
+    const { fechaIso, hora24 } = getAppointmentDateTime(data);
+    try {
+      await fetch('http://localhost:3000/api/bot-cita', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: data.name,
+          telefono: data.phone,
+          fecha: fechaIso,
+          hora: hora24,
+          motivo: data.service,
+        }),
+      });
+    } catch (_) {
+      // Si DentAdmin no está abierto en este dispositivo, la doctora puede registrarlo desde el botón del correo
+    }
+  }
+
+  // ---- Email Notification (EmailJS — con botones de gestión para la doctora) ----
   async function sendEmailNotification(data) {
+    const { fechaIso } = getAppointmentDateTime(data);
     const templateParams = {
-      paciente_nombre:   data.name,
-      paciente_telefono: data.phone,
-      servicio:          data.service,
-      dia:               data.selectedSlot.day,
-      hora:              data.selectedSlot.time,
+      paciente_nombre:       data.name,
+      paciente_telefono:     data.phone,
+      servicio:              data.service,
+      dia:                   `${data.selectedSlot.day} (${fechaIso})`,
+      hora:                  data.selectedSlot.time,
+      calendar_url:          generateCalendarUrl(data),
+      whatsapp_paciente_url: generatePatientWhatsAppUrl(data),
+      dentadmin_url:         generateDentAdminUrl(data),
     };
     try {
       if (typeof emailjs !== 'undefined') {
@@ -645,8 +695,9 @@
       const snapshot = { ...appointmentData };
       appointmentData = {};
 
-      // Enviar notificación automática a la doctora en segundo plano
+      // Enviar notificación automática a la doctora e intentar sincronizar con DentAdmin
       sendEmailNotification(snapshot);
+      syncWithDentAdmin(snapshot);
 
       await botReply(
         `<p>🎉 <strong>¡Tu cita ha sido agendada exitosamente!</strong></p>
