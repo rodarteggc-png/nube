@@ -22,6 +22,7 @@
     location: 'Distrito Domo, Santa Catarina',
     whatsapp: '528112219911',
     emergencyPhone: '81 1221 9911',
+    email: 'dra.avilaodontologia@gmail.com',
     hours: {
       weekdays: 'Lunes a Viernes de 10:00 AM a 7:00 PM',
       saturday: 'Sábados de 10:00 AM a 2:00 PM',
@@ -142,6 +143,9 @@
 
     // Services
     if (['servicios', 'que hacen', 'tratamientos', 'que ofrecen', 'cuanto cuesta', 'precios'].some(p => lower.includes(p))) return 'services';
+
+    // Contact
+    if (['telefono', 'contacto', 'whatsapp', 'correo', 'email', 'llamar', 'comunicarme', 'numero'].some(p => lower.includes(p))) return 'contact';
 
     // Greeting
     if (['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'hey', 'que tal', 'buen dia', 'saludos'].some(p => lower.includes(p) || lower === p)) return 'greeting';
@@ -382,14 +386,36 @@
         break;
       case 'cancel':
         await botReply(
-          'Para cancelar tu cita, por favor comunícate directamente con nosotros por teléfono para que podamos verificar tu reservación y procesarla correctamente. ¿Hay algo más en lo que pueda ayudarte?',
-          { quickReplies: [{ label: '📅 Agendar nueva cita', value: 'agendar' }, { label: 'No, gracias', value: 'no_gracias' }] }
+          `<p>Para cancelar tu cita, por favor comunícate directamente con nosotros para verificar tu reservación:</p>
+          <ul>
+            <li>📱 <strong>Tel / WhatsApp:</strong> <a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer">${OFFICE.emergencyPhone}</a></li>
+            <li>✉️ <strong>Correo:</strong> <a href="mailto:${OFFICE.email}">${OFFICE.email}</a></li>
+          </ul>
+          <p>¿Hay algo más en lo que pueda ayudarte?</p>`,
+          { html: true, quickReplies: [{ label: '📅 Agendar nueva cita', value: 'agendar' }, { label: 'No, gracias', value: 'no_gracias' }] }
         );
         break;
       case 'reschedule':
         await botReply(
-          'Para reprogramar tu cita existente, necesitamos verificar tu reservación. Por favor comunícate por teléfono para que podamos ayudarte con el cambio. ¿O prefieres agendar una cita completamente nueva?',
-          { quickReplies: [{ label: '📅 Agendar nueva cita', value: 'agendar' }, { label: 'No, gracias', value: 'no_gracias' }] }
+          `<p>Para reprogramar tu cita existente, por favor contáctanos directamente:</p>
+          <ul>
+            <li>📱 <strong>Tel / WhatsApp:</strong> <a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer">${OFFICE.emergencyPhone}</a></li>
+            <li>✉️ <strong>Correo:</strong> <a href="mailto:${OFFICE.email}">${OFFICE.email}</a></li>
+          </ul>
+          <p>¿O prefieres agendar una cita completamente nueva?</p>`,
+          { html: true, quickReplies: [{ label: '📅 Agendar nueva cita', value: 'agendar' }, { label: 'No, gracias', value: 'no_gracias' }] }
+        );
+        break;
+      case 'contact':
+        await botReply(
+          `<p>📞 <strong>Datos de contacto de Nube Dental Clinic:</strong></p>
+          <ul>
+            <li>📱 <strong>Tel / WhatsApp:</strong> <a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer">${OFFICE.emergencyPhone}</a></li>
+            <li>✉️ <strong>Correo:</strong> <a href="mailto:${OFFICE.email}">${OFFICE.email}</a></li>
+            <li>📍 <strong>Ubicación:</strong> <a href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">Distrito Domo, Santa Catarina</a></li>
+          </ul>
+          <p>¿Te gustaría agendar una cita?</p>`,
+          { html: true, quickReplies: [{ label: '📅 Agendar cita', value: 'agendar' }, { label: '🕐 Ver horarios', value: 'horarios' }] }
         );
         break;
       case 'hours':
