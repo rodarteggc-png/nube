@@ -344,6 +344,7 @@ body::after {
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--primary-dark);
+  cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
 }
 
