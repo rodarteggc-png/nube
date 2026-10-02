@@ -5,8 +5,11 @@
 (function () {
   'use strict';
 
+  // ---- Config Loading (from config.js or fallback) ----
+  const CFG = (typeof window !== 'undefined' && window.ASIST_DENTAL_CONFIG) ? window.ASIST_DENTAL_CONFIG : {};
+
   // ---- EmailJS Config ----
-  const EMAILJS = {
+  const EMAILJS = CFG.emailjs || {
     publicKey:  'p458PyAh6Pvxlzmh_',
     serviceId:  'service_qzya5no',
     templateId: 'template_3p6ndam',
@@ -17,53 +20,71 @@
 
   // ---- Office Data ----
   const OFFICE = {
-    name: 'Nube Dental Clinic',
-    doctor: 'Dra. Rosa Avila',
-    location: 'Distrito Domo — Av. Manuel Ordoñez 725, El Lechugal, Santa Catarina, N.L.',
-    whatsapp: '528112219911',
-    emergencyPhone: '81 1221 9911',
-    email: 'dra.avilaodontologia@gmail.com',
-    hours: {
-      weekdays: 'Lunes a Viernes de 10:00 AM a 7:00 PM',
-      saturday: 'Sábados de 10:00 AM a 2:00 PM',
-      sunday: 'Domingos solo con cita previa',
+    name: CFG.clinicName || 'Nube Dental Clinic',
+    doctor: CFG.doctorName || 'Dra. Rosa Ávila | Cirujano Dentista',
+    slogan: CFG.slogan || 'Tu sonrisa, nuestra prioridad ♡',
+    location: CFG.location || 'Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.',
+    mapsUrl: CFG.mapsUrl || 'https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6',
+    whatsapp: CFG.whatsapp || '528112219911',
+    emergencyPhone: CFG.emergencyPhone || '81 1221 9911',
+    email: CFG.email || 'dra.avilaodontologia@gmail.com',
+    hours: CFG.hours || {
+      weekdays: 'Lunes a Viernes (Solo bajo cita previa)',
+      saturday: 'Sábados (Solo bajo cita previa)',
+      sunday: 'Domingos (Solo bajo cita previa)',
+      label: 'Atención de Lunes a Domingo — Solo bajo citas',
     },
-    services: [
-      'Limpieza dental', 'Blanqueamiento', 'Ortodoncia',
-      'Endodoncia', 'Implantes', 'Valoración General',
+    services: CFG.services || [
+      'Limpieza Dental',
+      'Resinas Dentales',
+      'Blanqueamiento Dental',
+      'Carillas Dentales',
+      'Endodoncia',
+      'Periodoncia',
+      'Extracciones Dentales',
+      'Odontología General',
     ],
   };
 
   // ---- Service Descriptions ----
-  const SERVICE_DESCRIPTIONS = {
-    'Limpieza dental': {
+  // ---- Service Descriptions ----
+  const SERVICE_DESCRIPTIONS = CFG.serviceDescriptions || {
+    'Limpieza Dental': {
       emoji: '🪥',
-      desc: 'Una experiencia de limpieza profunda que devuelve el brillo natural a tu sonrisa. Utilizamos tecnología de última generación para remover depósitos y dejar tus dientes impecables, protegiendo tu salud bucal a largo plazo.',
+      desc: 'Previene y cuida tu sonrisa. Limpieza profunda y profesional con tecnología moderna que remueve sarro, placa bacteriana y manchas, protegiendo tu salud bucal.',
     },
-    'Blanqueamiento': {
+    'Resinas Dentales': {
       emoji: '✨',
-      desc: 'Transforma tu sonrisa con nuestro blanqueamiento de alta estética. Logramos resultados visibles y naturales desde la primera sesión, usando los mejores materiales del mercado para que tu sonrisa luzca luminosa y radiante sin comprometer la salud de tu esmalte.',
+      desc: 'Repara y devuelve la forma natural de tus dientes con resinas estéticas de alta calidad y máxima durabilidad, logrando un acabado invisible y resistente.',
     },
-    'Ortodoncia': {
-      emoji: '😁',
-      desc: 'Alineamos tu sonrisa con soluciones modernas y estéticas — desde brackets de última generación hasta alineadores casi invisibles. El resultado: dientes perfectamente alineados, una mordida funcional y una imagen que refleja confianza.',
+    'Blanqueamiento Dental': {
+      emoji: '🌟',
+      desc: 'Una sonrisa más brillante y luminosa. Tratamiento de alta estética con tecnología diseñada para proteger tu esmalte y lograr resultados visibles desde la primera sesión.',
+    },
+    'Carillas Dentales': {
+      emoji: '💎',
+      desc: 'Mejora la estética de tu sonrisa perfeccionando forma, color y armonía dental con materiales de alta calidad y un acabado 100% natural.',
     },
     'Endodoncia': {
       emoji: '🦷',
-      desc: 'Salvamos tu diente con técnicas avanzadas y mínimamente invasivas. Nuestro enfoque prioriza tu comodidad y la preservación de tu pieza dental natural, utilizando materiales biocompatibles de alta calidad para resultados duraderos.',
+      desc: 'Salva tus dientes naturales eliminando infecciones y dolor de raíz. Tratamientos precisos, seguros y con la máxima comodidad.',
     },
-    'Implantes': {
-      emoji: '🌟',
-      desc: 'Restauramos tu sonrisa con implantes de aspecto completamente natural, fabricados con los mejores materiales de la odontología moderna. Integran a la perfección con tus dientes naturales en color, forma y textura — una solución definitiva, estética y de alta durabilidad.',
+    'Periodoncia': {
+      emoji: '🌿',
+      desc: 'Encías sanas, dientes fuertes. Diagnóstico y tratamiento especializado para prevenir, desinflamar y recuperar la salud de tus encías.',
     },
-    'Valoración General': {
+    'Extracciones Dentales': {
+      emoji: '🩹',
+      desc: 'Sin dolor, con la mejor atención. Procedimientos cuidadosos realizados con anestesia efectiva, alta bioseguridad y calidez humana.',
+    },
+    'Odontología General': {
       emoji: '🩺',
-      desc: 'Tu punto de partida hacia una sonrisa saludable y estética. La Dra. Rosa Avila realiza un diagnóstico integral personalizado, identificando oportunidades de mejora y diseñando un plan de tratamiento a tu medida con los estándares más altos de la odontología actual.',
+      desc: 'Para toda la familia. Diagnóstico integral, prevención, revisiones periódicas y planes de tratamiento personalizados para cuidar la sonrisa de grandes y chicos.',
     },
   };
 
   // ---- Dynamic Calendar Days & Shift Hours ----
-  const SHIFT_HOURS = {
+  const SHIFT_HOURS = CFG.shiftHours || {
     'mañana': ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'],
     'tarde':  ['3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'],
   };
@@ -80,8 +101,8 @@
       const d = new Date(now);
       d.setDate(now.getDate() + offset);
       const dow = d.getDay();
-      if (dow === 0) continue; // Domingo cerrado sin cita previa especial
-      if (schedule === 'tarde' && dow === 6) continue; // Sábado solo abre por la mañana
+      // En fin de semana (Sábado y Domingo) solo turnos de mañana bajo cita previa
+      if ((dow === 0 || dow === 6) && schedule === 'tarde') continue;
 
       const dayName = DAY_NAMES[dow];
       const dateLabel = `${dayName} ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
@@ -178,15 +199,24 @@
   function matchService(text) {
     const lower = text.toLowerCase();
     const serviceMap = {
-      'limpieza': 'Limpieza dental',
-      'blanqueamiento': 'Blanqueamiento',
-      'ortodoncia': 'Ortodoncia',
+      'limpieza': 'Limpieza Dental',
+      'resina': 'Resinas Dentales',
+      'blanqueamiento': 'Blanqueamiento Dental',
+      'carilla': 'Carillas Dentales',
       'endodoncia': 'Endodoncia',
-      'implante': 'Implantes',
-      'valoracion': 'Valoración General',
-      'general': 'Valoración General',
-      'revision': 'Valoración General',
-      'chequeo': 'Valoración General',
+      'periodoncia': 'Periodoncia',
+      'extraccion': 'Extracciones Dentales',
+      'extraer': 'Extracciones Dentales',
+      'sacar muela': 'Extracciones Dentales',
+      'muela': 'Extracciones Dentales',
+      'general': 'Odontología General',
+      'valoracion': 'Odontología General',
+      'revision': 'Odontología General',
+      'chequeo': 'Odontología General',
+      'familiar': 'Odontología General',
+      'familia': 'Odontología General',
+      'ortodoncia': 'Odontología General',
+      'implante': 'Odontología General',
     };
     for (const [keyword, service] of Object.entries(serviceMap)) {
       if (lower.includes(keyword)) return service;
@@ -1154,7 +1184,7 @@
   // ---- Welcome Message on Load ----
   async function init() {
     await botReply(
-      '¡Hola! 👋 Bienvenido(a) a <strong>Nube Dental Clinic</strong>. Soy el asistente virtual de la <strong>Dra. Rosa Avila</strong>, tu coordinador virtual y estoy aquí para ayudarte.',
+      `¡Hola! 👋 Bienvenido(a) a <strong>${escapeHtml(OFFICE.name)}</strong>. Soy el asistente virtual de la <strong>${escapeHtml(OFFICE.doctor)}</strong>, tu coordinador virtual y estoy aquí para ayudarte.`,
       { html: true, delay: 800 }
     );
     await botReply(
