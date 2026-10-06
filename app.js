@@ -28,6 +28,7 @@
       label: 'Atención de Lunes a Domingo — Solo bajo citas',
     },
     services: CFG.services || [
+      'Consulta y Valoración',
       'Limpieza Dental',
       'Resinas Dentales',
       'Blanqueamiento Dental',
@@ -40,8 +41,11 @@
   };
 
   // ---- Service Descriptions ----
-  // ---- Service Descriptions ----
   const SERVICE_DESCRIPTIONS = CFG.serviceDescriptions || {
+    'Consulta y Valoración': {
+      emoji: '🔎',
+      desc: 'Revisión experta de tu salud bucal. Diagnosticamos tu estado actual, resolvemos tus dudas y creamos un plan de tratamiento ideal para tu sonrisa.',
+    },
     'Limpieza Dental': {
       emoji: '🪥',
       desc: 'Previene y cuida tu sonrisa. Limpieza profunda y profesional con tecnología moderna que remueve sarro, placa bacteriana y manchas, protegiendo tu salud bucal.',
@@ -202,10 +206,11 @@
       'extraer': 'Extracciones Dentales',
       'sacar muela': 'Extracciones Dentales',
       'muela': 'Extracciones Dentales',
+      'consulta': 'Consulta y Valoración',
+      'valoracion': 'Consulta y Valoración',
+      'revision': 'Consulta y Valoración',
+      'chequeo': 'Consulta y Valoración',
       'general': 'Odontología General',
-      'valoracion': 'Odontología General',
-      'revision': 'Odontología General',
-      'chequeo': 'Odontología General',
       'familiar': 'Odontología General',
       'familia': 'Odontología General',
       'ortodoncia': 'Odontología General',
@@ -1004,10 +1009,10 @@
       clearQuickReplies();
       if (!(await checkRateLimitOrWarn())) return;
       if (value === 'agendar_valoracion') {
-        appointmentData = { service: 'Valoración General' };
+        appointmentData = { service: 'Consulta y Valoración' };
         currentState = State.COLLECTING_SCHEDULE;
         await botReply(
-          'Agendaremos una <strong>Valoración General</strong> para que nuestra doctora pueda evaluarte. ¿Prefieres un horario por la mañana o por la tarde?',
+          'Agendaremos una <strong>Consulta y Valoración</strong> para que nuestra doctora pueda evaluarte de forma integral. ¿Prefieres un horario por la mañana o por la tarde?',
           {
             html: true,
             quickReplies: [

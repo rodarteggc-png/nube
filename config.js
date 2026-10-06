@@ -27,6 +27,7 @@
       label: 'Atención de Lunes a Domingo — Solo bajo citas',
     },
     services: [
+      'Consulta y Valoración',
       'Limpieza Dental',
       'Resinas Dentales',
       'Blanqueamiento Dental',
@@ -37,6 +38,10 @@
       'Odontología General',
     ],
     serviceDescriptions: {
+      'Consulta y Valoración': {
+        emoji: '🔎',
+        desc: 'Revisión experta de tu salud bucal. Diagnosticamos tu estado actual, resolvemos tus dudas y creamos un plan de tratamiento ideal para tu sonrisa.',
+      },
       'Limpieza Dental': {
         emoji: '🪥',
         desc: 'Previene y cuida tu sonrisa. Limpieza profunda y profesional con tecnología moderna que remueve sarro, placa bacteriana y manchas, protegiendo tu salud bucal.',
