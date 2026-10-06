@@ -21,10 +21,10 @@
     emergencyPhone: '81 1221 9911',
     email: 'dra.avilaodontologia@gmail.com',
     hours: {
-      weekdays: 'Lunes a Viernes (Solo bajo cita previa)',
-      saturday: 'Sábados (Solo bajo cita previa)',
-      sunday: 'Domingos (Solo bajo cita previa)',
-      label: 'Atención de Lunes a Domingo — Solo bajo citas',
+      weekdays: '10:00 AM a 1:00 PM y 2:00 PM a 7:00 PM',
+      saturday: '10:00 AM a 3:00 PM',
+      sunday: 'Solo con previa cita',
+      label: 'Atención de Lunes a Sábado',
     },
     services: [
       'Consulta y Valoración',

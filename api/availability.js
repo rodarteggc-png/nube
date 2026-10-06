@@ -4,11 +4,21 @@ import { google } from 'googleapis';
 const CALENDAR_ID = 'dra.avilaodontologia@gmail.com';
 const TIMEZONE = '-06:00'; // America/Monterrey (CST)
 
-// Los turnos base del consultorio
-const SHIFT_HOURS = {
-  'mañana': ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'],
-  'tarde':  ['3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'],
-};
+// Calcula los horarios base dependiendo del día de la semana
+function getBaseSlots(dateStr, schedule) {
+  const [y, m, d] = dateStr.split('-');
+  const dow = new Date(y, m - 1, d).getDay();
+  if (dow === 0) return []; // Domingos cerrados para citas online
+  if (dow === 6) { // Sábados
+    return schedule === 'mañana' 
+      ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] 
+      : ['2:00 PM', '3:00 PM'];
+  }
+  // Lunes a Viernes
+  return schedule === 'mañana' 
+    ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] 
+    : ['2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'];
+}
 
 // Convierte '10:00 AM' a formato 24h {h: 10, m: 0}
 function parseTime(timeStr) {
@@ -22,7 +32,9 @@ function parseTime(timeStr) {
 export default async function handler(req, res) {
   const { date, schedule } = req.query; // date: YYYY-MM-DD, schedule: 'mañana' o 'tarde'
   
-  if (!date || !schedule || !SHIFT_HOURS[schedule]) {
+  const baseSlots = getBaseSlots(date, schedule);
+  
+  if (!date || !schedule || baseSlots.length === 0) {
     return res.status(400).json({ error: 'Parámetros inválidos' });
   }
 
@@ -30,7 +42,7 @@ export default async function handler(req, res) {
   if (!credentialsStr) {
     // Si no hay credenciales (o hay error de tipeo), devolvemos todos los horarios como fallback para no romper el bot
     console.warn("No se encontró GOOGLE_CREDENTIALS en Vercel. Regresando todos los horarios.");
-    return res.status(200).json({ availableSlots: SHIFT_HOURS[schedule] });
+    return res.status(200).json({ availableSlots: baseSlots });
   }
 
   try {
@@ -62,7 +74,7 @@ export default async function handler(req, res) {
     const busyIntervals = response.data.calendars[CALENDAR_ID].busy || [];
     
     // Lista de todos los horarios posibles para este turno
-    const allSlots = SHIFT_HOURS[schedule];
+    const allSlots = baseSlots;
     const availableSlots = [];
 
     // Por cada horario, revisamos si choca con algún bloque ocupado
@@ -96,6 +108,6 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('Error al consultar Google Calendar:', err);
     // En caso de error de Google, caemos elegantemente ofreciendo todos los horarios (modo MVP)
-    return res.status(200).json({ availableSlots: SHIFT_HOURS[schedule] });
+    return res.status(200).json({ availableSlots: baseSlots });
   }
 }

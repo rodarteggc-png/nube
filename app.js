@@ -81,13 +81,16 @@
   };
 
   // ---- Dynamic Calendar Days & Shift Hours ----
-  const SHIFT_HOURS = CFG.shiftHours || {
-    'mañana': ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'],
-    'tarde':  ['3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'],
-  };
-
-  const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-  const MONTH_NAMES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  function getBaseSlots(fechaIso, schedule) {
+    const [y, m, d] = fechaIso.split('-');
+    const dow = new Date(y, m - 1, d).getDay();
+    if (dow === 0) return []; // Domingo
+    if (dow === 6) { // Sábado
+      return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] : ['2:00 PM', '3:00 PM'];
+    }
+    // L-V
+    return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] : ['2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'];
+  }
 
   function getUpcomingDays(schedule, maxDays = 6) {
     const days = [];
@@ -98,8 +101,8 @@
       const d = new Date(now);
       d.setDate(now.getDate() + offset);
       const dow = d.getDay();
-      // En fin de semana (Sábado y Domingo) solo turnos de mañana bajo cita previa
-      if ((dow === 0 || dow === 6) && schedule === 'tarde') continue;
+      
+      if (dow === 0) continue; // Domingos no online
 
       const dayName = DAY_NAMES[dow];
       const dateLabel = `${dayName} ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
@@ -565,9 +568,9 @@
         await botReply(
           `<p>Nuestros horarios de atención son:</p>
           <ul>
-            <li><strong>Lunes a Viernes:</strong> 10:00 AM – 7:00 PM</li>
-            <li><strong>Sábados:</strong> 10:00 AM – 2:00 PM</li>
-            <li><strong>Domingos:</strong> Solo con cita previa</li>
+            <li><strong>Lunes a Viernes:</strong> 10:00 AM – 1:00 PM y 2:00 PM – 7:00 PM</li>
+            <li><strong>Sábados:</strong> 10:00 AM – 3:00 PM</li>
+            <li><strong>Domingos:</strong> Solo con previa cita</li>
           </ul>
           <p>¿Te gustaría agendar una cita?</p>`,
           { html: true, quickReplies: [{ label: '📅 Sí, agendar cita', value: 'agendar' }, { label: 'No, gracias', value: 'no_gracias' }] }
@@ -726,8 +729,8 @@
         'Por favor indica si prefieres un horario por la mañana o por la tarde.',
         {
           quickReplies: [
-            { label: '🌅 Mañana (Lun–Sáb)', value: 'mañana' },
-            { label: '🌆 Tarde (Lun–Vie)', value: 'tarde' },
+            { label: '🌅 Mañana', value: 'mañana' },
+            { label: '🌆 Tarde', value: 'tarde' },
             { label: '🏠 Cancelar', value: 'cancelar_flujo' },
           ],
         }
@@ -751,7 +754,7 @@
         appointmentData.availableHours = data.availableSlots || [];
       } catch (e) {
         console.error("Error al obtener disponibilidad:", e);
-        appointmentData.availableHours = SHIFT_HOURS[appointmentData.schedule]; // Fallback
+        appointmentData.availableHours = getBaseSlots(chosenDay.fechaIso, appointmentData.schedule); // Fallback
       }
 
       hideTyping();
@@ -1051,8 +1054,8 @@
           {
             html: true,
             quickReplies: [
-              { label: '🌅 Mañana (Lun–Sáb)', value: 'mañana' },
-              { label: '🌆 Tarde (Lun–Vie)', value: 'tarde' },
+              { label: '🌅 Mañana', value: 'mañana' },
+              { label: '🌆 Tarde', value: 'tarde' },
               { label: '🏠 Cancelar', value: 'cancelar_flujo' },
             ],
           }
