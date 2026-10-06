@@ -1,0 +1,9 @@
+{
+  "name": "asistdental",
+  "version": "1.0.0",
+  "description": "Nube Dental Clinic",
+  "main": "app.js",
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}

@@ -739,9 +739,44 @@
     const chosenDay = matchDay(text, appointmentData.availableDays || []);
     if (chosenDay) {
       appointmentData.selectedDay = chosenDay;
-      appointmentData.availableHours = SHIFT_HOURS[appointmentData.schedule];
+      
+      // Notificar al paciente que estamos leyendo el calendario real
+      await botReply(`Revisando la agenda de la doctora para el <strong>${chosenDay.label}</strong>... 📅`, { html: true, delay: 500 });
+      showTyping();
+      chatInput.disabled = true;
+
+      try {
+        const res = await fetch(`/api/availability?date=${chosenDay.fechaIso}&schedule=${appointmentData.schedule}`);
+        const data = await res.json();
+        appointmentData.availableHours = data.availableSlots || [];
+      } catch (e) {
+        console.error("Error al obtener disponibilidad:", e);
+        appointmentData.availableHours = SHIFT_HOURS[appointmentData.schedule]; // Fallback
+      }
+
+      hideTyping();
+      chatInput.disabled = false;
       currentState = State.OFFERING_SLOTS;
 
+      // Si no quedan horarios disponibles para ese día
+      if (appointmentData.availableHours.length === 0) {
+        currentState = State.COLLECTING_SCHEDULE;
+        await botReply(
+          `<p>Lo siento mucho, la agenda ya está <strong>totalmente llena</strong> para el <strong>${chosenDay.label}</strong> por la ${appointmentData.schedule}. 😔</p>
+           <p>Por favor elige otro turno para buscar más opciones:</p>`,
+          {
+            html: true,
+            quickReplies: [
+              { label: '🌅 Buscar por la Mañana', value: 'mañana' },
+              { label: '🌆 Buscar por la Tarde', value: 'tarde' },
+              { label: '🏠 Cancelar', value: 'cancelar_flujo' },
+            ]
+          }
+        );
+        return;
+      }
+
+      // Si hay horarios, se los ofrecemos
       const hoursHtml = appointmentData.availableHours
         .map((h, i) => `<li><strong>${i + 1}.</strong> ${h}</li>`)
         .join('');
@@ -750,7 +785,7 @@
       hourButtons.push({ label: '🏠 Cancelar', value: 'cancelar_flujo' });
 
       await botReply(
-        `<p>Horarios disponibles para el <strong>${chosenDay.label}</strong>:</p><ul>${hoursHtml}</ul><p>¿A qué hora prefieres tu cita?</p>`,
+        `<p>¡Encontré espacios libres! Horarios disponibles para el <strong>${chosenDay.label}</strong>:</p><ul>${hoursHtml}</ul><p>¿A qué hora prefieres tu cita?</p>`,
         { html: true, quickReplies: hourButtons }
       );
     } else {
