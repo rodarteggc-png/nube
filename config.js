@@ -26,11 +26,6 @@
       sunday: 'Domingos (Solo bajo cita previa)',
       label: 'Atención de Lunes a Domingo — Solo bajo citas',
     },
-    emailjs: {
-      publicKey: 'p458PyAh6Pvxlzmh_',
-      serviceId: 'service_qzya5no',
-      templateId: 'template_3p6ndam',
-    },
     services: [
       'Limpieza Dental',
       'Resinas Dentales',

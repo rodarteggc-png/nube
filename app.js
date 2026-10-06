@@ -8,15 +8,8 @@
   // ---- Config Loading (from config.js or fallback) ----
   const CFG = (typeof window !== 'undefined' && window.ASIST_DENTAL_CONFIG) ? window.ASIST_DENTAL_CONFIG : {};
 
-  // ---- EmailJS Config ----
-  const EMAILJS = CFG.emailjs || {
-    publicKey:  'p458PyAh6Pvxlzmh_',
-    serviceId:  'service_qzya5no',
-    templateId: 'template_3p6ndam',
-  };
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init(EMAILJS.publicKey);
-  }
+  // ---- EmailJS Config (REMOVED) ----
+  // La configuración y envío de correos ahora se maneja de forma segura en el backend (/api/book.js)
 
   // ---- Office Data ----
   const OFFICE = {
@@ -892,26 +885,7 @@
     return `http://localhost:3000/api/bot-cita?${params.toString()}`;
   }
 
-  async function syncWithDentAdmin(data) {
-    const { fechaIso, hora24 } = getAppointmentDateTime(data);
-    try {
-      await fetch('http://localhost:3000/api/bot-cita', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: data.name,
-          telefono: data.phone,
-          fecha: fechaIso,
-          hora: hora24,
-          motivo: data.service,
-        }),
-      });
-    } catch (_) {
-      // Si DentAdmin no está abierto en este dispositivo, la doctora puede registrarlo desde el botón del correo
-    }
-  }
-
-  // ---- Email Notification (EmailJS — con botones de gestión para la doctora) ----
+  // ---- Email Notification (Backend Seguro) ----
   async function sendEmailNotification(data) {
     const { fechaIso } = getAppointmentDateTime(data);
     const templateParams = {
@@ -924,13 +898,22 @@
       whatsapp_paciente_url: generatePatientWhatsAppUrl(data),
       dentadmin_url:         generateDentAdminUrl(data),
     };
+
     try {
-      if (typeof emailjs !== 'undefined') {
-        await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, templateParams);
+      // Llamamos a nuestro nuevo servidor en Vercel de forma segura
+      const response = await fetch('/api/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ templateParams })
+      });
+
+      if (!response.ok) {
+        console.warn('Error al procesar la cita en el servidor');
+        return false;
       }
       return true;
     } catch (err) {
-      console.warn('EmailJS error:', err);
+      console.error('Error de red:', err);
       return false;
     }
   }
@@ -942,10 +925,11 @@
       const snapshot = { ...appointmentData };
       appointmentData = {};
 
-      // Registrar candado anti-spam y enviar notificaciones
+      // Registrar candado anti-spam local y enviar notificación al servidor
       recordBookedAppointment();
       sendEmailNotification(snapshot);
-      syncWithDentAdmin(snapshot);
+      // (La sincronización automática de DentAdmin fue removida del frontend para evitar errores de red. 
+      // La doctora utilizará el enlace mágico incluido en el correo cuando instale DentAdmin).
 
       await botReply(
         `<p>🎉 <strong>¡Tu solicitud de cita ha sido registrada exitosamente!</strong></p>
