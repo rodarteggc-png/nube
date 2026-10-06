@@ -908,11 +908,14 @@
       });
 
       if (!response.ok) {
-        console.warn('Error al procesar la cita en el servidor');
+        const errorData = await response.json();
+        alert('Detalle del error (Toma captura de esto): ' + (errorData.details || errorData.error));
+        console.warn('Error al procesar la cita en el servidor', errorData);
         return false;
       }
       return true;
     } catch (err) {
+      alert('Error de red: ' + err.message);
       console.error('Error de red:', err);
       return false;
     }

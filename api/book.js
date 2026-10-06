@@ -73,11 +73,11 @@ export default async function handler(req, res) {
       console.error('Error de EmailJS:', errorText);
       // Revertir el rate limit si falló el envío para que el paciente pueda reintentar
       global.rateLimitCache.delete(ip);
-      return res.status(500).json({ error: 'Error al enviar el correo a la doctora.' });
+      return res.status(500).json({ error: 'Error de EmailJS', details: errorText });
     }
   } catch (error) {
     console.error('Excepción al conectar con EmailJS:', error);
     global.rateLimitCache.delete(ip);
-    return res.status(500).json({ error: 'Error interno del servidor.' });
+    return res.status(500).json({ error: 'Error interno del servidor.', details: error.message });
   }
 }
