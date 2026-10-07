@@ -81,6 +81,9 @@
   };
 
   // ---- Dynamic Calendar Days & Shift Hours ----
+  const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const MONTH_NAMES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
   function getBaseSlots(fechaIso, schedule) {
     const [y, m, d] = fechaIso.split('-');
     const dow = new Date(y, m - 1, d).getDay();
