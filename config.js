@@ -23,7 +23,6 @@
     hours: {
       weekdays: '10:00 AM a 1:00 PM y 2:00 PM a 7:00 PM',
       saturday: '10:00 AM a 3:00 PM',
-      sunday: 'Solo con previa cita',
       label: 'Atención de Lunes a Sábado',
     },
     services: [

@@ -573,7 +573,6 @@
           <ul>
             <li><strong>Lunes a Viernes:</strong> 10:00 AM – 1:00 PM y 2:00 PM – 7:00 PM</li>
             <li><strong>Sábados:</strong> 10:00 AM – 3:00 PM</li>
-            <li><strong>Domingos:</strong> Solo con previa cita</li>
           </ul>
           <p>¿Te gustaría agendar una cita?</p>`,
           { html: true, quickReplies: [{ label: '📅 Sí, agendar cita', value: 'agendar' }, { label: 'No, gracias', value: 'no_gracias' }] }
