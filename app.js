@@ -897,7 +897,7 @@
   function generateCalendarUrl(data) {
     const { eventDate } = getAppointmentDateTime(data);
     const endDate = new Date(eventDate.getTime() + 60 * 60 * 1000);
-    const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0];
+    const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
     const params = new URLSearchParams({
       action: 'TEMPLATE',
