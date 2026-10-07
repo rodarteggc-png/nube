@@ -314,7 +314,7 @@
   }
 
   // ---- Anti-Spam Rate Limiting (1 cita cada 12h por dispositivo) ----
-  const BOOKING_COOLDOWN_MS = 1000; // 1 segundo (Modificado temporalmente para pruebas)
+  const BOOKING_COOLDOWN_MS = 12 * 60 * 60 * 1000; // 12 horas
   const BOOKING_STORAGE_KEY = 'nube_last_booking_ts';
 
   function canBookAppointment() {

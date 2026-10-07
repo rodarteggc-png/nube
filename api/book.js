@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     global.rateLimitCache = new Map();
   }
   const now = Date.now();
-  const cooldown = 1000; // 1 segundo (Modificado temporalmente para pruebas)
+  const cooldown = 12 * 60 * 60 * 1000; // 12 horas
 
   if (global.rateLimitCache.has(ip)) {
     const lastRequest = global.rateLimitCache.get(ip);
