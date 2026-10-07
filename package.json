@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Nube Dental Clinic",
   "main": "app.js",
+  "type": "module",
   "dependencies": {
     "googleapis": "^144.0.0"
   }

@@ -750,6 +750,7 @@
 
       try {
         const res = await fetch(`/api/availability?date=${chosenDay.fechaIso}&schedule=${appointmentData.schedule}`);
+        if (!res.ok) throw new Error('API request failed');
         const data = await res.json();
         appointmentData.availableHours = data.availableSlots || [];
       } catch (e) {
