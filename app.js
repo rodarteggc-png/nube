@@ -89,10 +89,10 @@
     const dow = new Date(y, m - 1, d).getDay();
     if (dow === 0) return []; // Domingo
     if (dow === 6) { // Sábado
-      return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] : ['2:00 PM', '3:00 PM'];
+      return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM'] : ['2:00 PM', '3:00 PM'];
     }
     // L-V
-    return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] : ['2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'];
+    return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM'] : ['2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'];
   }
 
   function getUpcomingDays(schedule, maxDays = 12) {
