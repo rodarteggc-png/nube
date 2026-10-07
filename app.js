@@ -939,6 +939,7 @@
       paciente_telefono:     data.phone,
       servicio:              data.service,
       dia:                   `${data.selectedSlot.day} (${fechaIso})`,
+      fecha_iso:             fechaIso,
       hora:                  data.selectedSlot.time,
       calendar_url:          generateCalendarUrl(data),
       whatsapp_paciente_url: generatePatientWhatsAppUrl(data),
