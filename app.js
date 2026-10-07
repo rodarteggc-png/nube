@@ -95,12 +95,12 @@
     return schedule === 'mañana' ? ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM'] : ['2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'];
   }
 
-  function getUpcomingDays(schedule, maxDays = 6) {
+  function getUpcomingDays(schedule, maxDays = 12) {
     const days = [];
     const now = new Date();
     const pad = (n) => String(n).padStart(2, '0');
 
-    for (let offset = 1; offset <= 14 && days.length < maxDays; offset++) {
+    for (let offset = 1; offset <= 30 && days.length < maxDays; offset++) {
       const d = new Date(now);
       d.setDate(now.getDate() + offset);
       const dow = d.getDay();
@@ -713,7 +713,7 @@
     const schedule = matchSchedule(text);
     if (schedule) {
       appointmentData.schedule = schedule;
-      appointmentData.availableDays = getUpcomingDays(schedule, 6);
+      appointmentData.availableDays = getUpcomingDays(schedule, 12);
       currentState = State.COLLECTING_DAY;
 
       const daysListHtml = appointmentData.availableDays
