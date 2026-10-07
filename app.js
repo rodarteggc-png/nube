@@ -960,6 +960,12 @@
         console.warn('Error al procesar la cita en el servidor', errorData);
         return false;
       }
+      
+      const responseData = await response.json();
+      if (responseData.calendarError) {
+        alert('DEBUG - ERROR DE GOOGLE CALENDAR (Toma captura): ' + responseData.calendarError);
+      }
+
       return true;
     } catch (err) {
       alert('Error de red: ' + err.message);
