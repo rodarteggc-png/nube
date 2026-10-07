@@ -26,6 +26,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Datos incompletos' });
   }
 
+  let calendarError = 'No se intentó';
+
   // ==========================================
   // 2. CREAR EL EVENTO EN GOOGLE CALENDAR
   // ==========================================
@@ -73,9 +75,10 @@ export default async function handler(req, res) {
       });
 
       console.log('Evento de cita creado en Google Calendar exitosamente.');
+      calendarError = null;
     } catch (err) {
       console.error('Error al insertar cita en Google Calendar:', err);
-      // No regresamos error aquí para intentar enviar el correo de respaldo
+      calendarError = err.message || JSON.stringify(err);
     }
   }
 
@@ -103,15 +106,15 @@ export default async function handler(req, res) {
     });
 
     if (response.ok) {
-      return res.status(200).json({ success: true, message: 'Cita enviada y agendada correctamente' });
+      return res.status(200).json({ success: true, message: 'Cita enviada y agendada correctamente', calendarError });
     } else {
       const errorText = await response.text();
       console.error('Error de EmailJS:', errorText);
       // Aún si el correo falla, lo marcamos exitoso para el cliente si llegó hasta aquí.
-      return res.status(200).json({ success: true, message: 'Agendado con advertencia de email' });
+      return res.status(200).json({ success: true, message: 'Agendado con advertencia de email', calendarError, emailError: errorText });
     }
   } catch (error) {
     console.error('Excepción al conectar con EmailJS:', error);
-    return res.status(200).json({ success: true, message: 'Agendado con excepción de email' });
+    return res.status(200).json({ success: true, message: 'Agendado con excepción de email', calendarError, emailError: error.message });
   }
 }
