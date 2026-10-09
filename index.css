@@ -340,18 +340,18 @@ body::after {
 .service-tag {
   display: inline-block;
   padding: var(--space-xs) var(--space-sm);
-  background: linear-gradient(135deg, hsla(210, 78%, 56%, 0.1), hsla(258, 58%, 62%, 0.1));
-  border: 1px solid hsla(210, 78%, 56%, 0.2);
+  background: var(--accent-glow);
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--primary-dark);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
 }
 
 .service-tag:hover {
-  background: linear-gradient(135deg, hsla(210, 78%, 56%, 0.15), hsla(258, 58%, 62%, 0.15));
+  background: var(--primary-glow);
   transform: scale(1.05);
 }
 
@@ -485,7 +485,7 @@ body::after {
 }
 
 .summary-card {
-  background: linear-gradient(135deg, hsla(210, 85%, 94%, 0.96), hsla(215, 75%, 92%, 0.96));
+  background: var(--accent-light);
   color: var(--text);
   border: 1px solid var(--primary-light);
   border-radius: var(--radius);
@@ -645,7 +645,7 @@ body::after {
 .quick-reply-btn:nth-child(6) { animation-delay: 0.25s; }
 
 .quick-reply-btn:hover {
-  background: linear-gradient(135deg, hsla(210, 85%, 92%, 0.8), hsla(258, 65%, 92%, 0.8));
+  background: var(--accent-glow);
   border-color: var(--primary-light);
   transform: translateY(-2px) scale(1.03);
   box-shadow: var(--shadow-sm);
