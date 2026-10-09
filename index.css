@@ -107,7 +107,7 @@ body::before, body::after {
 body::before {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, hsl(211, 70%, 78%) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--primary) 35%, transparent) 0%, transparent 70%);
   top: -100px;
   right: -100px;
 }
@@ -115,7 +115,7 @@ body::before {
 body::after {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, hsl(211, 60%, 84%) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--primary) 25%, transparent) 0%, transparent 70%);
   bottom: -100px;
   left: -100px;
   animation-delay: -10s;
