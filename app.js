@@ -15,6 +15,7 @@
   const OFFICE = {
     name: CFG.clinicName || 'Nube Dental Clinic',
     doctor: CFG.doctorName || 'Dra. Rosa Ávila | Cirujano Dentista',
+    logoUrl: CFG.logoUrl || 'logo.png',
     slogan: CFG.slogan || 'Tu sonrisa, nuestra prioridad ♡',
     location: CFG.location || 'Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.',
     mapsUrl: CFG.mapsUrl || 'https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6',
@@ -1236,6 +1237,12 @@
 
     const locationLinkEl = document.getElementById('ui-location-link');
     if (locationLinkEl) locationLinkEl.href = OFFICE.mapsUrl;
+
+    const logoEl = document.getElementById('ui-logo');
+    if (logoEl) logoEl.src = OFFICE.logoUrl;
+
+    const faviconEl = document.getElementById('ui-favicon');
+    if (faviconEl) faviconEl.href = OFFICE.logoUrl;
 
     const hoursListEl = document.getElementById('ui-hours-list');
     if (hoursListEl && OFFICE.hours) {
