@@ -101,9 +101,17 @@
     const now = new Date();
     const pad = (n) => String(n).padStart(2, '0');
 
-    for (let offset = 1; offset <= 30 && days.length < maxDays; offset++) {
+    for (let offset = 0; offset <= 30 && days.length < maxDays; offset++) {
       const d = new Date(now);
       d.setDate(now.getDate() + offset);
+      
+      // Si es hoy, verificar si ya es muy tarde para agendar
+      if (offset === 0) {
+        const currentHour = now.getHours();
+        if (schedule === 'mañana' && currentHour >= 12) continue;
+        if (schedule === 'tarde' && currentHour >= 18) continue;
+      }
+
       const dow = d.getDay();
       
       if (dow === 0) continue; // Domingos no online
