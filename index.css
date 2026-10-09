@@ -17,9 +17,14 @@
   --warning: hsl(38, 90%, 55%);
   --danger: hsl(0, 70%, 58%);
   
-  /* Surfaces - Universal Neutral Background */
-  --bg-gradient: linear-gradient(135deg, #fdfdfd 0%, #f0f4f8 100%);
-  --surface: hsla(0, 0%, 100%, 0.95);
+  /* Surfaces - Fondo suavemente tintado con el color del tema */
+  --bg-gradient: linear-gradient(160deg, 
+    color-mix(in srgb, var(--primary) 6%, white) 0%, 
+    color-mix(in srgb, var(--primary) 12%, white) 40%, 
+    color-mix(in srgb, var(--primary) 9%, white) 70%, 
+    color-mix(in srgb, var(--primary) 5%, white) 100%
+  );
+  --surface: hsla(0, 0%, 100%, 0.92);
   --surface-solid: #ffffff;
   --surface-hover: #f7f9fa;
   --surface-bot: var(--primary);
