@@ -9,7 +9,7 @@ window.ASIST_DENTAL_CONFIG = {
   "doctorName": "Dra. Rosa Avila | Cirujano Dentista",
   "logoUrl": "logo_rosa.png",
   "slogan": "Tu sonrisa, nuestra prioridad ♡",
-  "location": "Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.",
+  "location": "Distrito Domo, Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.",
   "mapsUrl": "https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6",
   "whatsapp": "528112219911",
   "emergencyPhone": "81 1221 9911",
