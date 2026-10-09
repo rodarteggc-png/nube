@@ -14,7 +14,7 @@
   // ---- Office Data ----
   const OFFICE = {
     name: CFG.clinicName || 'Nube Dental Clinic',
-    doctor: CFG.doctorName || 'Dra. Rosa Ávila | Cirujano Dentista',
+    doctor: CFG.doctorName || 'Dra. Rosa Avila | Cirujano Dentista',
     logoUrl: CFG.logoUrl || 'logo.png',
     slogan: CFG.slogan || 'Tu sonrisa, nuestra prioridad ♡',
     location: CFG.location || 'Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.',
