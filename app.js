@@ -15,6 +15,7 @@
   const OFFICE = {
     name: CFG.clinicName || 'Nube Dental Clinic',
     doctor: CFG.doctorName || 'Dra. Rosa Avila | Cirujano Dentista',
+    promotion: CFG.promotion || null,
     logoUrl: CFG.logoUrl || 'logo.png',
     slogan: CFG.slogan || 'Tu sonrisa, nuestra prioridad ♡',
     location: CFG.location || 'Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.',
@@ -1230,6 +1231,21 @@
       if (metaTheme) metaTheme.setAttribute('content', CFG.themeColor);
     }
     
+    if (OFFICE.promotion) {
+      const sidebarEl = document.getElementById('sidebar');
+      if (sidebarEl) {
+        const promoCard = document.createElement('div');
+        promoCard.className = 'sidebar-card';
+        promoCard.style.border = '2px dashed var(--primary)';
+        promoCard.style.background = 'color-mix(in srgb, var(--primary) 5%, white)';
+        promoCard.innerHTML = `<h3 style="color: var(--primary);">🎁 Promoción Especial</h3>
+        <p style="white-space: pre-line; font-weight: bold; font-size: 0.9rem; margin-top: 8px;">${escapeHtml(OFFICE.promotion)}</p>`;
+        const firstCard = sidebarEl.querySelector('.sidebar-card');
+        if (firstCard) sidebarEl.insertBefore(promoCard, firstCard);
+        else sidebarEl.appendChild(promoCard);
+      }
+    }
+    
     document.title = `${OFFICE.name} — Coordinador Virtual`;
     
     const clinicNameEl = document.getElementById('ui-clinic-name');
@@ -1282,6 +1298,14 @@
       `¡Hola! 👋 Bienvenido(a) a <strong>${escapeHtml(OFFICE.name)}</strong>. Soy el asistente virtual de la <strong>${escapeHtml(OFFICE.doctor)}</strong>, tu coordinador virtual y estoy aquí para ayudarte.`,
       { html: true, delay: 800 }
     );
+    
+    if (OFFICE.promotion) {
+      await botReply(
+        `Por cierto, te comparto nuestra promoción de este mes:<br><br><strong>${escapeHtml(OFFICE.promotion).replace(/\n/g, '<br>')}</strong>`,
+        { html: true, delay: 1200 }
+      );
+    }
+
     await botReply(
       '¿En qué puedo asistirte hoy?',
       {
