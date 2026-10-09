@@ -172,6 +172,9 @@
     ];
     if (diagnosisPatterns.some(p => lower.includes(p))) return 'diagnosis';
 
+    // Promotion
+    if (['promocion', 'promoción', 'agendar_promocion', 'aprovechar', 'promo'].some(p => lower.includes(p))) return 'promotion';
+
     // Appointment
     if (['cita', 'agendar', 'reservar', 'consulta', 'quiero agendar', 'sacar cita', 'hacer una cita', 'programar', 'apartar'].some(p => lower.includes(p))) return 'appointment';
 
@@ -190,8 +193,7 @@
     // Services
     if (['servicios', 'que hacen', 'tratamientos', 'que ofrecen', 'cuanto cuesta', 'precios'].some(p => lower.includes(p))) return 'services';
 
-    // Promotion
-    if (['promocion', 'promoción', 'agendar_promocion', 'aprovechar', 'promo'].some(p => lower.includes(p))) return 'promotion';
+
 
     // Contact
     if (['telefono', 'contacto', 'whatsapp', 'correo', 'email', 'llamar', 'comunicarme', 'numero'].some(p => lower.includes(p))) return 'contact';
