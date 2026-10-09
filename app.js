@@ -190,6 +190,9 @@
     // Services
     if (['servicios', 'que hacen', 'tratamientos', 'que ofrecen', 'cuanto cuesta', 'precios'].some(p => lower.includes(p))) return 'services';
 
+    // Promotion
+    if (['promocion', 'promoción', 'agendar_promocion', 'aprovechar', 'promo'].some(p => lower.includes(p))) return 'promotion';
+
     // Contact
     if (['telefono', 'contacto', 'whatsapp', 'correo', 'email', 'llamar', 'comunicarme', 'numero'].some(p => lower.includes(p))) return 'contact';
 
@@ -528,17 +531,45 @@
   async function handleIdleState(text, intent) {
     switch (intent) {
       case 'greeting':
+        const greetingReplies = [];
+        if (OFFICE.promotion) {
+          greetingReplies.push({ label: '🎁 Aprovechar Promoción', value: 'agendar_promocion' });
+        }
+        greetingReplies.push(
+          { label: '📅 Agendar cita', value: 'agendar' },
+          { label: '🕐 Horarios', value: 'horarios' },
+          { label: '📍 Ubicación', value: 'ubicacion' },
+          { label: '🦷 Servicios', value: 'servicios' }
+        );
         await botReply(
           `¡Hola! 👋 Bienvenido(a) a ${escapeHtml(OFFICE.name)}. Soy tu coordinador virtual y estoy aquí para ayudarte. ¿En qué puedo asistirte hoy?`,
-          {
-            quickReplies: [
-              { label: '📅 Agendar cita', value: 'agendar' },
-              { label: '🕐 Horarios', value: 'horarios' },
-              { label: '📍 Ubicación', value: 'ubicacion' },
-              { label: '🦷 Servicios', value: 'servicios' },
-            ],
-          }
+          { quickReplies: greetingReplies }
         );
+        break;
+
+      case 'promotion':
+        if (OFFICE.promotion) {
+          appointmentData.service = 'Promoción Especial';
+          currentState = State.COLLECTING_SCHEDULE;
+          await botReply(
+            `¡Excelente elección! Agendaremos tu cita para aprovechar la <strong>Promoción Especial</strong>.<br><br>¿Prefieres un horario por la <strong>mañana</strong> o por la <strong>tarde</strong>?`,
+            {
+              html: true,
+              quickReplies: [
+                { label: '🌅 Mañana (10:00 AM – 1:00 PM)', value: 'mañana' },
+                { label: '🌆 Tarde (2:00 PM – 7:00 PM)', value: 'tarde' },
+                { label: '🏠 Cancelar', value: 'cancelar_flujo' },
+              ],
+            }
+          );
+        } else {
+          await botReply('Por el momento no tenemos promociones activas, pero tenemos excelentes precios. ¿Deseas agendar una cita normal?', {
+            quickReplies: [
+              { label: '📅 Sí, agendar cita', value: 'agendar' },
+              { label: '🏠 No, gracias', value: 'inicio' }
+            ]
+          });
+        }
         break;
       case 'appointment':
         await startAppointmentFlow(text);
@@ -1306,16 +1337,22 @@
       );
     }
 
+    const initialReplies = [];
+    if (OFFICE.promotion) {
+      initialReplies.push({ label: '🎁 Aprovechar Promoción', value: 'agendar_promocion' });
+    }
+    initialReplies.push(
+      { label: '📅 Agendar cita', value: 'agendar' },
+      { label: '🕐 Horarios', value: 'horarios' },
+      { label: '📍 Ubicación', value: 'ubicacion' },
+      { label: '🦷 Servicios', value: 'servicios' }
+    );
+
     await botReply(
       '¿En qué puedo asistirte hoy?',
       {
         delay: 500,
-        quickReplies: [
-          { label: '📅 Agendar cita', value: 'agendar' },
-          { label: '🕐 Horarios', value: 'horarios' },
-          { label: '📍 Ubicación', value: 'ubicacion' },
-          { label: '🦷 Servicios', value: 'servicios' },
-        ],
+        quickReplies: initialReplies,
       }
     );
   }
