@@ -1,7 +1,7 @@
 // api/availability.js - Consulta disponibilidad en tiempo real usando Google Calendar
 import { google } from 'googleapis';
 
-const CALENDAR_ID = 'dra.avilaodontologia@gmail.com';
+// Se lee dinamicamente en handler
 const TIMEZONE = '-06:00'; // America/Monterrey (CST)
 
 // Calcula los horarios base dependiendo del día de la semana
@@ -59,6 +59,20 @@ export default async function handler(req, res) {
     // Definir los límites de búsqueda para todo el día seleccionado
     const timeMin = `${date}T00:00:00${TIMEZONE}`;
     const timeMax = `${date}T23:59:59${TIMEZONE}`;
+    let CALENDAR_ID = 'dra.avilaodontologia@gmail.com';
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const dbPath = path.resolve('./doctors_db.json');
+      const dbStr = fs.readFileSync(dbPath, 'utf8');
+      const db = JSON.parse(dbStr);
+      const docId = process.env.DOCTOR_ID || 'rosy';
+      if (db[docId] && db[docId].email) {
+        CALENDAR_ID = db[docId].email;
+      }
+    } catch (e) {
+      console.error('No se pudo leer doctors_db.json, usando default', e);
+    }
 
     // Consultar el endpoint de FreeBusy
     const response = await calendar.freebusy.query({

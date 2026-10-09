@@ -4,6 +4,9 @@
   "description": "Nube Dental Clinic",
   "main": "app.js",
   "type": "module",
+  "scripts": {
+    "build": "node build.js"
+  },
   "dependencies": {
     "googleapis": "^144.0.0"
   }

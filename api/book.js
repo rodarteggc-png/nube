@@ -69,8 +69,23 @@ export default async function handler(req, res) {
         },
       };
 
+      let calendarEmail = 'dra.avilaodontologia@gmail.com';
+      try {
+        const fs = await import('fs');
+        const path = await import('path');
+        const dbPath = path.resolve('./doctors_db.json');
+        const dbStr = fs.readFileSync(dbPath, 'utf8');
+        const db = JSON.parse(dbStr);
+        const docId = process.env.DOCTOR_ID || 'rosy';
+        if (db[docId] && db[docId].email) {
+          calendarEmail = db[docId].email;
+        }
+      } catch (e) {
+        console.error('No se pudo leer doctors_db.json, usando default', e);
+      }
+
       await calendar.events.insert({
-        calendarId: 'dra.avilaodontologia@gmail.com',
+        calendarId: calendarEmail,
         resource: event,
       });
 
