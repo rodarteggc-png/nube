@@ -18,22 +18,18 @@
   --danger: hsl(0, 70%, 58%);
   
   /* Surfaces - Fondo suavemente tintado con el color del tema */
-  --bg-gradient: linear-gradient(160deg, 
-    color-mix(in srgb, var(--primary) 6%, white) 0%, 
-    color-mix(in srgb, var(--primary) 12%, white) 40%, 
-    color-mix(in srgb, var(--primary) 9%, white) 70%, 
-    color-mix(in srgb, var(--primary) 5%, white) 100%
-  );
+  --bg-gradient: #FDFBF7; /* Crema suave */
   --surface: hsla(0, 0%, 100%, 0.92);
   --surface-solid: #ffffff;
   --surface-hover: #f7f9fa;
   --surface-bot: var(--primary);
-  --surface-user: var(--primary-light);
+  --surface-user: #E8ECE9; /* Gris verdoso pálido */
   
   /* Text */
   --text: hsl(215, 28%, 17%);
   --text-secondary: hsl(215, 18%, 46%);
   --text-on-primary: #ffffff;
+  --text-user: #2c3e50; /* Texto oscuro para la burbuja del usuario */
   --text-muted: hsl(215, 14%, 64%);
   
   /* Borders & Effects */
@@ -455,14 +451,16 @@ body::after {
   background: var(--surface-bot);
   color: var(--text-on-primary);
   border: none;
-  border-top-left-radius: var(--radius-xs);
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius-xs);
   box-shadow: var(--shadow-sm);
 }
 
 .message.user .message-bubble {
   background: var(--surface-user);
-  color: var(--text-on-primary);
-  border-top-right-radius: var(--radius-xs);
+  color: var(--text-user);
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius-xs);
   box-shadow: var(--shadow-md);
 }
 
@@ -700,8 +698,8 @@ body::after {
   height: 48px;
   border: none;
   border-radius: var(--radius-full);
-  background: var(--surface-user);
-  color: var(--text-on-primary);
+  background: #C87D55; /* Terracota suave */
+  color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
