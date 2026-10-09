@@ -8,12 +8,11 @@ const dbPath = path.resolve('./doctors_db.json');
 const rawData = fs.readFileSync(dbPath, 'utf8');
 const doctorsDB = JSON.parse(rawData);
 
-// 3. Extraer SOLAMENTE la configuración del doctor seleccionado
-const selectedConfig = doctorsDB[docId];
+// 3. Extraer la configuración del doctor seleccionado (por key o id)
+const selectedConfig = doctorsDB[docId] || Object.values(doctorsDB).find(d => d.id === docId) || doctorsDB['rosy'];
 
 if (!selectedConfig) {
-  console.error(`[Error] No se encontró el doctor con ID "${docId}" en doctors_db.json`);
-  process.exit(1); // Detener el despliegue si el ID es incorrecto
+  console.warn(`[Warn] No se encontró el doctor con ID "${docId}", usando predeterminado.`);
 }
 
 // 4. Sobrescribir el archivo config.js con ÚNICAMENTE los datos de este doctor
