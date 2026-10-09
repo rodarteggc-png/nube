@@ -6,7 +6,7 @@
 window.ASIST_DENTAL_CONFIG = {
   "id": "rosa_avila",
   "clinicName": "MiNube Dental Assistant",
-  "doctorName": "Dra. Rosa Ávila | Cirujano Dentista",
+  "doctorName": "Dra. Rosa Avila | Cirujano Dentista",
   "logoUrl": "logo_rosa.png",
   "slogan": "Tu sonrisa, nuestra prioridad ♡",
   "location": "Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.",
