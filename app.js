@@ -519,7 +519,7 @@
     switch (intent) {
       case 'greeting':
         await botReply(
-          '¡Hola! 👋 Bienvenido(a) a Nube Dental Clinic. Soy tu coordinador virtual y estoy aquí para ayudarte. ¿En qué puedo asistirte hoy?',
+          `¡Hola! 👋 Bienvenido(a) a ${escapeHtml(OFFICE.name)}. Soy tu coordinador virtual y estoy aquí para ayudarte. ¿En qué puedo asistirte hoy?`,
           {
             quickReplies: [
               { label: '📅 Agendar cita', value: 'agendar' },
@@ -557,7 +557,7 @@
         break;
       case 'contact':
         await botReply(
-          `<p>📞 <strong>Datos de contacto de Nube Dental Clinic:</strong></p>
+          `<p>📞 <strong>Datos de contacto de ${escapeHtml(OFFICE.name)}:</strong></p>
           <ul>
             <li>📱 <strong>Tel / WhatsApp:</strong> <a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer">${OFFICE.emergencyPhone}</a></li>
             <li>✉️ <strong>Correo:</strong> <a href="mailto:${OFFICE.email}">${OFFICE.email}</a></li>
@@ -587,7 +587,7 @@
       case 'services': {
         const servicesList = OFFICE.services.map(s => `<li>${s}</li>`).join('');
         await botReply(
-          `<p>En Nube Dental Clinic ofrecemos los siguientes servicios (selecciona uno para ver más detalles):</p><ul>${servicesList}</ul>`,
+          `<p>En ${escapeHtml(OFFICE.name)} ofrecemos los siguientes servicios (selecciona uno para ver más detalles):</p><ul>${servicesList}</ul>`,
           { html: true, quickReplies: OFFICE.services.map(s => ({ label: s, value: s.toLowerCase() })) }
         );
         break;
@@ -903,7 +903,7 @@
       action: 'TEMPLATE',
       text: `Cita Dental - ${data.service} (${data.name})`,
       dates: `${fmt(eventDate)}/${fmt(endDate)}`,
-      details: `Paciente: ${data.name}\nTeléfono: ${data.phone}\nServicio: ${data.service}\n\nNube Dental Clinic - Dra. Rosa Avila`,
+      details: `Paciente: ${data.name}\nTeléfono: ${data.phone}\nServicio: ${data.service}\n\n${OFFICE.name} - ${OFFICE.doctor}`,
       location: OFFICE.location,
     });
 
@@ -914,7 +914,7 @@
   function generatePatientWhatsAppUrl(data) {
     const cleanPhone = data.phone.replace(/\D/g, '');
     const fullPhone = cleanPhone.length === 10 ? `52${cleanPhone}` : cleanPhone;
-    const msg = `Hola ${data.name}, te escribimos del consultorio de la Dra. Rosa Avila (Nube Dental Clinic) para confirmar tu cita de *${data.service}* el *${data.selectedSlot.day}* a las *${data.selectedSlot.time}*. 🦷`;
+    const msg = `Hola ${data.name}, te escribimos de ${OFFICE.name} para confirmar tu cita de *${data.service}* el *${data.selectedSlot.day}* a las *${data.selectedSlot.time}*. 🦷`;
     return `https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`;
   }
 
@@ -995,7 +995,7 @@
           <p>📅 ${escapeHtml(snapshot.selectedSlot.day)} a las ${escapeHtml(snapshot.selectedSlot.time)}</p>
           <p>📍 <a href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">${OFFICE.location}</a></p>
         </div>
-        <p>📧 Hemos notificado automáticamente a la <strong>Dra. Rosa Avila</strong>, quien te contactará por WhatsApp para confirmar tu espacio. ¡Te esperamos en <strong>Nube Dental Clinic</strong>! 😊</p>`,
+        <p>📧 Hemos notificado automáticamente al consultorio de <strong>${escapeHtml(OFFICE.doctor)}</strong>, quienes te contactarán por WhatsApp para confirmar tu espacio. ¡Te esperamos en <strong>${escapeHtml(OFFICE.name)}</strong>! 😊</p>`,
         { html: true }
       );
     } else if (intent === 'deny' || text.toLowerCase().includes('corregir') || text.toLowerCase().includes('no')) {
