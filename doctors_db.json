@@ -65,44 +65,49 @@
       }
     }
   },
-  "pedro": {
-    "id": "pedro_perez",
-    "clinicName": "Clínica Dental Dr. Pedro",
-    "doctorName": "Dr. Pedro Pérez | Cirujano Dentista",
-    "slogan": "Cuidando tu sonrisa de forma profesional",
-    "location": "Centro de Monterrey, N.L.",
+  "miranda": {
+    "id": "miranda_silva",
+    "clinicName": "Consultorio Dental Dra. Miranda Silva",
+    "doctorName": "Dra. Miranda Silva | Cirujano Dentista",
+    "slogan": "Odontología Integral y Estética",
+    "location": "San Pedro Garza García, N.L.",
     "mapsUrl": "https://maps.app.goo.gl/",
-    "whatsapp": "528100000000",
-    "emergencyPhone": "81 0000 0000",
-    "email": "pedro@ejemplo.com",
-    "themeColor": "#28a745",
+    "whatsapp": "528199999999",
+    "emergencyPhone": "81 9999 9999",
+    "email": "dramirandasilva@gmail.com",
+    "themeColor": "#ff69b4",
     "hours": {
-      "weekdays": "9:00 AM a 2:00 PM y 4:00 PM a 8:00 PM",
-      "saturday": "9:00 AM a 2:00 PM",
-      "label": "Atención Lunes a Sábado"
+      "weekdays": "10:00 AM a 2:00 PM y 4:00 PM a 7:00 PM",
+      "saturday": "10:00 AM a 2:00 PM",
+      "label": "Atención de Lunes a Sábado"
     },
     "services": [
-      "Consulta Inicial",
-      "Limpieza Dental",
-      "Resinas Dentales",
-      "Extracciones"
+      "Valoración Inicial",
+      "Limpieza Ultrasónica",
+      "Blanqueamiento LED",
+      "Diseño de Sonrisa",
+      "Resinas Estéticas"
     ],
     "serviceDescriptions": {
-      "Consulta Inicial": {
+      "Valoración Inicial": {
         "emoji": "🔎",
-        "desc": "Revisión general y diagnóstico."
+        "desc": "Revisión completa, toma de fotografías y plan de tratamiento personalizado."
       },
-      "Limpieza Dental": {
+      "Limpieza Ultrasónica": {
         "emoji": "🪥",
-        "desc": "Limpieza profunda profesional."
+        "desc": "Remoción de sarro sin dolor usando vibración ultrasónica."
       },
-      "Resinas Dentales": {
+      "Blanqueamiento LED": {
+        "emoji": "🌟",
+        "desc": "Aclara hasta 4 tonos en una sola sesión de 45 minutos."
+      },
+      "Diseño de Sonrisa": {
+        "emoji": "💎",
+        "desc": "Análisis estético y colocación de carillas para una sonrisa perfecta."
+      },
+      "Resinas Estéticas": {
         "emoji": "✨",
-        "desc": "Restauraciones estéticas."
-      },
-      "Extracciones": {
-        "emoji": "🩹",
-        "desc": "Extracción segura de piezas dentales."
+        "desc": "Restauraciones del mismo color del diente, invisibles y duraderas."
       }
     }
   }
