@@ -1197,14 +1197,7 @@
     }
   });
 
-  // Sidebar service tags click handler
-  document.querySelectorAll('.service-tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-      if (sidebar) sidebar.classList.remove('open');
-      if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-      handleQuickReply(tag.textContent.trim());
-    });
-  });
+  // Se movio el handler de service-tags a initializeUI
 
   // Sidebar toggle (mobile)
   if (infoToggle) {
@@ -1221,8 +1214,57 @@
     });
   }
 
+  function initializeUI() {
+    if (CFG.themeColor) {
+      document.documentElement.style.setProperty('--primary', CFG.themeColor);
+      document.documentElement.style.setProperty('--surface-bot', CFG.themeColor);
+      document.documentElement.style.setProperty('--primary-dark', CFG.themeColor);
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', CFG.themeColor);
+    }
+    
+    document.title = `${OFFICE.name} — Coordinador Virtual`;
+    
+    const clinicNameEl = document.getElementById('ui-clinic-name');
+    if (clinicNameEl) clinicNameEl.textContent = OFFICE.name;
+
+    const doctorNameEl = document.getElementById('ui-doctor-name');
+    if (doctorNameEl) doctorNameEl.textContent = OFFICE.doctor;
+
+    const locationTextEl = document.getElementById('ui-location-text');
+    if (locationTextEl) locationTextEl.textContent = OFFICE.location;
+
+    const locationLinkEl = document.getElementById('ui-location-link');
+    if (locationLinkEl) locationLinkEl.href = OFFICE.mapsUrl;
+
+    const hoursListEl = document.getElementById('ui-hours-list');
+    if (hoursListEl && OFFICE.hours) {
+      hoursListEl.innerHTML = `
+        <li>Lunes a Viernes</li>
+        <li><strong>${OFFICE.hours.weekdays || ''}</strong></li>
+        <li>Sábados</li>
+        <li><strong>${OFFICE.hours.saturday || ''}</strong></li>
+      `;
+    }
+
+    const servicesListEl = document.getElementById('ui-services-list');
+    if (servicesListEl && OFFICE.services) {
+      servicesListEl.innerHTML = OFFICE.services.map(s => `<span class="service-tag">${escapeHtml(s)}</span>`).join('');
+    }
+
+    // Attach sidebar service tags click handler to newly created elements
+    document.querySelectorAll('.service-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        if (sidebar) sidebar.classList.remove('open');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        handleQuickReply(tag.textContent.trim());
+      });
+    });
+  }
+
   // ---- Welcome Message on Load ----
   async function init() {
+    initializeUI();
     await botReply(
       `¡Hola! 👋 Bienvenido(a) a <strong>${escapeHtml(OFFICE.name)}</strong>. Soy el asistente virtual de la <strong>${escapeHtml(OFFICE.doctor)}</strong>, tu coordinador virtual y estoy aquí para ayudarte.`,
       { html: true, delay: 800 }

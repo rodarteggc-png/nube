@@ -9,7 +9,7 @@
   <meta property="og:title" content="Nube Dental Clinic — Coordinador Virtual">
   <meta property="og:description" content="Agenda tu cita dental de forma rápida y sencilla con nuestro asistente virtual.">
   <meta property="og:type" content="website">
-  <title>Nube Dental Clinic — Coordinador Virtual</title>
+  <title id="ui-title">Nube Dental Clinic — Coordinador Virtual</title>
   <link rel="stylesheet" href="index.css">
   <link rel="icon" type="image/png" href="logo.png">
 </head>
@@ -20,8 +20,8 @@
     <div class="logo">
       <img src="logo.png" alt="Nube Dental Clinic" class="logo-icon">
       <div class="logo-text">
-        <h1>Nube Dental Clinic</h1>
-        <p>Dra. Rosa Ávila | Cirujano Dentista</p>
+        <h1 id="ui-clinic-name">Nube Dental Clinic</h1>
+        <p id="ui-doctor-name">Dra. Rosa Ávila | Cirujano Dentista</p>
       </div>
     </div>
     <div class="status-badge" aria-label="Estado: en línea">
@@ -39,11 +39,11 @@
     <aside class="sidebar" id="sidebar" aria-label="Información del consultorio">
       <div class="sidebar-card">
         <h3>📍 Ubicación</h3>
-        <p><a href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">📌 Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.</a></p>
+        <p><a id="ui-location-link" href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">📌 <span id="ui-location-text">Av. Manuel Ordoñez 801 Local 11, Santa Catarina, N.L.</span></a></p>
       </div>
       <div class="sidebar-card">
         <h3>🕐 Horarios</h3>
-        <ul>
+        <ul id="ui-hours-list">
           <li>Lunes a Viernes</li>
           <li><strong>10:00 AM a 1:00 PM y 2:00 PM a 7:00 PM</strong></li>
           <li>Sábados</li>
@@ -52,7 +52,7 @@
       </div>
       <div class="sidebar-card">
         <h3>🦷 Nuestros Servicios</h3>
-        <div class="services-list">
+        <div class="services-list" id="ui-services-list">
           <span class="service-tag">Consulta y Valoración</span>
           <span class="service-tag">Limpieza Dental</span>
           <span class="service-tag">Resinas Dentales</span>
