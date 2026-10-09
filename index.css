@@ -1,38 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap');
 
 :root {
-  /* Color Palette — Green Clinic Theme (#91A885) */
-  --primary: hsl(100, 17%, 59%);
-  --primary-light: hsl(100, 20%, 70%);
-  --primary-dark: hsl(100, 20%, 42%);
-  --primary-glow: hsla(100, 17%, 59%, 0.28);
-  --accent: hsl(100, 20%, 72%);
-  --accent-light: hsl(100, 20%, 82%);
-  --accent-glow: hsla(100, 20%, 72%, 0.22);
+  /* Color Palette — Stronger Green Theme for Contrast */
+  --primary: hsl(100, 25%, 45%);       /* Verde más fuerte/oscuro */
+  --primary-light: hsl(100, 20%, 55%);
+  --primary-dark: hsl(100, 30%, 32%);
+  --primary-glow: hsla(100, 25%, 45%, 0.28);
+  --accent: hsl(100, 20%, 65%);
+  --accent-light: hsl(100, 20%, 75%);
+  --accent-glow: hsla(100, 20%, 65%, 0.22);
   --success: hsl(152, 55%, 42%);
   --warning: hsl(38, 90%, 55%);
   --danger: hsl(0, 70%, 58%);
   
   /* Surfaces */
-  --bg-gradient: linear-gradient(160deg, hsl(100, 20%, 93%) 0%, hsl(100, 15%, 90%) 40%, hsl(100, 18%, 92%) 70%, hsl(100, 15%, 95%) 100%);
-  --surface: hsla(0, 0%, 100%, 0.82);
+  --bg-gradient: linear-gradient(160deg, #FFFFFF 0%, #F3F5ED 40%, #FAFCF5 70%, #F3F5ED 100%);
+  --surface: hsla(0, 0%, 100%, 0.95);
   --surface-solid: hsl(0, 0%, 100%);
-  --surface-hover: hsla(100, 20%, 97%, 0.92);
-  --surface-bot: hsl(100, 17%, 59%);
-  --surface-user: hsl(100, 15%, 54%);
+  --surface-hover: #F3F5ED;
+  --surface-bot: var(--primary);
+  --surface-user: hsl(100, 20%, 40%);
   
   /* Text */
-  --text: hsl(100, 20%, 17%);
-  --text-secondary: hsl(100, 12%, 46%);
+  --text: hsl(100, 30%, 15%);           /* Verde muy oscuro casi negro */
+  --text-secondary: hsl(100, 15%, 40%);
   --text-on-primary: #ffffff;
-  --text-muted: hsl(100, 10%, 64%);
+  --text-muted: hsl(100, 10%, 55%);
   
   /* Borders & Effects */
-  --border: hsla(100, 20%, 82%, 0.45);
-  --border-light: hsla(100, 20%, 88%, 0.38);
-  --shadow-sm: 0 2px 8px hsla(100, 25%, 30%, 0.07);
-  --shadow-md: 0 8px 24px hsla(100, 25%, 30%, 0.11);
-  --shadow-lg: 0 16px 48px hsla(100, 25%, 30%, 0.15);
+  --border: hsla(100, 20%, 75%, 0.45);
+  --border-light: hsla(100, 20%, 85%, 0.38);
+  --shadow-sm: 0 2px 8px hsla(100, 40%, 20%, 0.07);
+  --shadow-md: 0 8px 24px hsla(100, 40%, 20%, 0.11);
+  --shadow-lg: 0 16px 48px hsla(100, 40%, 20%, 0.15);
   --shadow-glow: 0 0 20px var(--primary-glow);
   --glass-blur: blur(16px);
   --glass-blur-strong: blur(24px);
