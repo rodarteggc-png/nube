@@ -1218,8 +1218,6 @@
   function initializeUI() {
     if (CFG.themeColor) {
       document.documentElement.style.setProperty('--primary', CFG.themeColor);
-      document.documentElement.style.setProperty('--surface-bot', CFG.themeColor);
-      document.documentElement.style.setProperty('--primary-dark', CFG.themeColor);
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) metaTheme.setAttribute('content', CFG.themeColor);
     }
