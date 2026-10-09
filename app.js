@@ -695,7 +695,7 @@
           html: true,
           quickReplies: [
             { label: '🌅 Mañana (10:00 AM – 1:00 PM)', value: 'mañana' },
-            { label: '🌆 Tarde (3:00 PM – 6:00 PM)', value: 'tarde' },
+            { label: '🌆 Tarde (2:00 PM – 7:00 PM)', value: 'tarde' },
             { label: '🏠 Cancelar', value: 'cancelar_flujo' },
           ],
         }
