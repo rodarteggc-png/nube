@@ -32,3 +32,11 @@ Asistente virtual conversacional para la recepción y agendamiento automático d
 * **TOKEN DE GOOGLE CALENDAR:** No exponer credenciales de servicio o refresh tokens en el repositorio público.
 * **PRESERVAR ESTÉTICA DE CHAT:** Mantener la experiencia conversacional fluida sin bloqueos de red.
 * **NO MODIFICAR `AsistDental_Respaldo`:** Esa carpeta es un respaldo estático de seguridad.
+
+---
+
+## 📌 5. ESTADO OPERATIVO DEL PILOTO (DRA. ROSA ÁVILA) & ROADMAP
+* **Preferencia Operativa del Piloto:** La Dra. Rosa Ávila gestiona sus recordatorios de forma manual y personalizada directamente con sus pacientes. Se respeta este flujo y el asistente se mantiene estable sin automatizaciones intrusivas.
+* **Webhook CareDent Activo (`4048841`):** Al reservar una cita en el bot, se dispara `POST https://dentadmin.vercel.app/api/bot-cita` para alimentar el calendario y expediente de DentaAdmin en tiempo real.
+* **Roadmap Versión Comercial Multidoctor:** Los recordatorios automatizados de WhatsApp vía Meta Cloud API y el triaje conversacional con Gemini Flash quedan documentados para la versión SaaS comercial (`CareDent SaaS Standard`) para nuevos doctores.
+
