@@ -98,7 +98,32 @@ export default async function handler(req, res) {
   }
 
   // ==========================================
-  // 3. ENVIAR EMAIL DE RESPALDO (EmailJS)
+  // 3. SINCRONIZAR AUTOMÁTICAMENTE CON DENTAADMIN NUBE
+  // ==========================================
+  const DENTAADMIN_API_URL = process.env.DENTAADMIN_API_URL || 'https://dentadmin.vercel.app/api/bot-cita';
+  try {
+    const dentaRes = await fetch(DENTAADMIN_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre: templateParams.paciente_nombre,
+        telefono: templateParams.paciente_telefono,
+        fecha: templateParams.fecha_iso,
+        hora: templateParams.hora,
+        motivo: templateParams.servicio,
+        doctor: 'Dra. Rosa Avila',
+        id_sillon: 'sillon_1'
+      })
+    });
+    if (dentaRes.ok) {
+      console.log('✅ Cita sincronizada automáticamente en DentaAdmin Nube.');
+    }
+  } catch (dentaErr) {
+    console.warn('Advertencia: No se pudo enviar cita a DentaAdmin:', dentaErr.message);
+  }
+
+  // ==========================================
+  // 4. ENVIAR EMAIL DE RESPALDO (EmailJS)
   // ==========================================
   const SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_qzya5no';
   const TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || 'template_3p6ndam'; 
