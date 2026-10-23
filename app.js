@@ -195,11 +195,24 @@
 
 
 
-    // Contact
-    if (['telefono', 'contacto', 'whatsapp', 'correo', 'email', 'llamar', 'comunicarme', 'numero'].some(p => lower.includes(p))) return 'contact';
+    // Greeting (incluyendo saludos cordiales a la doctora)
+    if (/^(hola|buenos dias|buenas tardes|buenas noches|hey|que tal|buen dia|saludos)(\s+(doctora|doctor|doc|dra|dra\.))?$/.test(lower.trim()) ||
+        ['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'hey', 'que tal', 'buen dia', 'saludos'].some(p => lower === p)) {
+      return 'greeting';
+    }
 
-    // Greeting
-    if (['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'hey', 'que tal', 'buen dia', 'saludos'].some(p => lower.includes(p) || lower === p)) return 'greeting';
+    // Contact / Hablar con la Doctora, Asesor o Humano
+    const contactKeywords = [
+      'telefono', 'contacto', 'whatsapp', 'correo', 'email', 'llamar', 'comunicarme', 'numero de telefono',
+      'humano', 'asesor', 'asesora', 'persona real', 'alguien real', 'atencion personalizada',
+      'hablar con la doctora', 'hablar con el doctor', 'hablar con la dra', 'hablar con un asesor', 'hablar con una asesora',
+      'hablar con un humano', 'hablar con una persona', 'hablar con alguien', 'platicar con la doctora',
+      'comunicarme con la doctora', 'comunicarme con un asesor', 'pasar con un asesor', 'pasar con la doctora',
+      'contactar a la doctora', 'contactar a un asesor', 'necesito hablar con', 'quiero hablar con'
+    ];
+    const isDirectContactWord = ['doctora', 'la doctora', 'dra', 'la dra', 'dra rosy', 'dra rosa avila', 'asesor', 'humano', 'persona', 'contacto'].includes(lower.trim());
+
+    if (contactKeywords.some(p => lower.includes(p)) || isDirectContactWord) return 'contact';
 
     // Thanks
     if (['gracias', 'muchas gracias', 'thanks', 'agradezco'].some(p => lower.includes(p))) return 'thanks';
@@ -600,14 +613,21 @@
         break;
       case 'contact':
         await botReply(
-          `<p>📞 <strong>Datos de contacto de ${escapeHtml(OFFICE.name)}:</strong></p>
-          <ul>
-            <li>📱 <strong>Tel / WhatsApp:</strong> <a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer">${OFFICE.emergencyPhone}</a></li>
-            <li>✉️ <strong>Correo:</strong> <a href="mailto:${OFFICE.email}">${OFFICE.email}</a></li>
-            <li>📍 <strong>Ubicación:</strong> <a href="https://maps.app.goo.gl/e43jZg8zW8yDDQ6S6" target="_blank" rel="noopener noreferrer">${OFFICE.location}</a></li>
-          </ul>
-          <p>¿Te gustaría agendar una cita?</p>`,
-          { html: true, quickReplies: [{ label: '📅 Agendar cita', value: 'agendar' }, { label: '🕐 Ver horarios', value: 'horarios' }] }
+          `<p>¡Con gusto! Te comunico directamente con la <strong>Dra. Rosa Avila</strong>. Puedes enviarle un mensaje a su WhatsApp o llamarle directamente con un solo clic aquí:</p>
+          <div class="summary-card" style="text-align: center; margin: 12px 0; padding: 14px;">
+            <a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #25D366; color: white; padding: 10px 18px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.95rem; box-shadow: 0 2px 6px rgba(37,211,102,0.3);">📱 Enviar WhatsApp a la Dra. Rosa Avila</a>
+            <p style="margin: 8px 0 0 0; font-size: 0.88rem; color: #475569;">📞 Tel: <strong>${OFFICE.emergencyPhone}</strong></p>
+            <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: #64748b;">✉️ ${OFFICE.email}</p>
+          </div>
+          <p>¿O prefieres que te ayude a revisar horarios o agendar por aquí?</p>`,
+          {
+            html: true,
+            quickReplies: [
+              { label: '📅 Agendar cita', value: 'agendar' },
+              { label: '🕐 Horarios', value: 'horarios' },
+              { label: '📍 Ubicación', value: 'ubicacion' },
+            ],
+          }
         );
         break;
       case 'hours':
@@ -663,8 +683,11 @@
           );
         } else {
           await botReply(
-            'Disculpa, no logré entender tu solicitud. ¿Puedo ayudarte con alguna de estas opciones?',
+            `<p>Disculpa, no logré comprender del todo tu solicitud. Si prefieres atención personalizada o tienes una duda específica, puedes escribirle directamente a la <strong>Dra. Rosa Avila</strong>:</p>
+            <p style="margin: 10px 0;"><a href="https://wa.me/${OFFICE.whatsapp}" target="_blank" rel="noopener noreferrer" style="color: #16a34a; font-weight: bold; text-decoration: underline;">📱 Escribir por WhatsApp a la Dra. Rosa Avila (${OFFICE.emergencyPhone})</a></p>
+            <p>O si lo prefieres, puedo ayudarte con alguna de estas opciones:</p>`,
             {
+              html: true,
               quickReplies: [
                 { label: '📅 Agendar cita', value: 'agendar' },
                 { label: '🕐 Horarios', value: 'horarios' },

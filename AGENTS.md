@@ -1,12 +1,12 @@
 # MEMORIA A LARGO PLAZO: ASISTDENTAL (NUBE DENTAL CLINIC)
 > **Ubicación:** `c:\Users\RO106536\Documents\Perso\Proy_Gemini\AsistDental`  
 > **Estado Operativo:** 🟢 Activo en Producción / Desplegado en Vercel  
-> **Identificador:** `minubeassistant` (Asistente Virtual Dra. Rosa Ávila)
+> **Identificador:** `minubeassistant` (Asistente Virtual Dra. Rosa Avila)
 
 ---
 
 ## 📌 1. PROPÓSITO DEL PROYECTO
-Asistente virtual conversacional para la recepción y agendamiento automático de pacientes en la clínica dental "Nube" de la Dra. Rosa Ávila. Conecta con pacientes vía web o WhatsApp, califica el motivo de consulta y reserva turnos en la agenda del especialista correspondiente.
+Asistente virtual conversacional para la recepción y agendamiento automático de pacientes en la clínica dental "Nube" de la Dra. Rosa Avila. Conecta con pacientes vía web o WhatsApp, califica el motivo de consulta y reserva turnos en la agenda del especialista correspondiente.
 
 ---
 
@@ -35,8 +35,8 @@ Asistente virtual conversacional para la recepción y agendamiento automático d
 
 ---
 
-## 📌 5. ESTADO OPERATIVO DEL PILOTO (DRA. ROSA ÁVILA) & ROADMAP
-* **Preferencia Operativa del Piloto:** La Dra. Rosa Ávila gestiona sus recordatorios de forma manual y personalizada directamente con sus pacientes. Se respeta este flujo y el asistente se mantiene estable sin automatizaciones intrusivas.
+## 📌 5. ESTADO OPERATIVO DEL PILOTO (DRA. ROSA AVILA) & ROADMAP
+* **Preferencia Operativa del Piloto:** La Dra. Rosa Avila gestiona sus recordatorios de forma manual y personalizada directamente con sus pacientes. Se respeta este flujo y el asistente se mantiene estable sin automatizaciones intrusivas.
 * **Webhook CareDent Activo (`4048841`):** Al reservar una cita en el bot, se dispara `POST https://dentadmin.vercel.app/api/bot-cita` para alimentar el calendario y expediente de DentaAdmin en tiempo real.
 * **Roadmap Versión Comercial Multidoctor:** Los recordatorios automatizados de WhatsApp vía Meta Cloud API y el triaje conversacional con Gemini Flash quedan documentados para la versión SaaS comercial (`CareDent SaaS Standard`) para nuevos doctores.
 
